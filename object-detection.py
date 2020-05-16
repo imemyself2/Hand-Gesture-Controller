@@ -10,21 +10,21 @@ test_datagen = ImageDataGenerator(rescale=1/255)
 
 train_generator = train_datagen.flow_from_directory(
     '/home/unnamed/Documents/TensorflowProject/rps2/train',
-    target_size=(500,500),
+    target_size=(200,200),
     batch_size=20,
     class_mode='categorical'
 )
 
 test_generator = test_datagen.flow_from_directory(
     '/home/unnamed/Documents/TensorflowProject/rps2/test',
-    target_size=(500,500),
+    target_size=(200,200),
     batch_size=20,
     class_mode='categorical'
 )
 
 cdmodel = tf.keras.models.Sequential([
     
-    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(500,500,3)),
+    tf.keras.layers.Conv2D(16, (3,3), activation='relu', input_shape=(200,200,3)),
     tf.keras.layers.MaxPooling2D(2,2),
     tf.keras.layers.Conv2D(32, (3,3), activation='relu'),
     tf.keras.layers.MaxPooling2D(2,2),
@@ -59,7 +59,7 @@ while cap.isOpened():
     ret, frame = cap.read()
     strFrame = frame
     
-    frame = cv2.resize(frame, (500,500))
+    frame = cv2.resize(frame, (200,200))
     frame = np.expand_dims(frame, axis=0)
     frame = np.vstack([frame])
     frame = frame/255
