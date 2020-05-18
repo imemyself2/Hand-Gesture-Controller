@@ -4,6 +4,7 @@ import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, img_to_array, load_img
 from tensorflow.keras.optimizers import RMSprop
 import cv2
+from pyautogui import press
 
 train_datagen = ImageDataGenerator(rescale=1/255)
 test_datagen = ImageDataGenerator(rescale=1/255)
@@ -41,8 +42,8 @@ cdmodel = tf.keras.models.Sequential([
 ])
 
 cdmodel.summary()
-if(os.path.exists('/home/unnamed/Documents/TensorflowProject/hand-weights.h5')):
-    cdmodel.load_weights('hand-weights.h5')
+if(os.path.exists('/home/unnamed/Documents/TensorflowProject/hand-weights_85p.h5')):
+    cdmodel.load_weights('hand-weights_85p.h5')
 else:
     cdmodel.compile(optimizer=RMSprop(lr=0.001), loss='categorical_crossentropy', metrics=['accuracy'])
     history = cdmodel.fit_generator(train_generator, epochs=20, validation_data=test_generator, verbose=1)
@@ -66,35 +67,17 @@ while cap.isOpened():
     prediction=cdmodel.predict(frame)
     if(counter == 1):
         if(prediction[0][1] == max(prediction[0])):
-            cv2.putText(strFrame, "PAPER", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            cv2.putText(strFrame, "FORWARD", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            press('w')
             # print('paper')
         elif(prediction[0][0] == max(prediction[0])):
-            cv2.putText(strFrame, "ROCK", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            cv2.putText(strFrame, "BACKWARD", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            press('s')
             # print('rock')
         elif(prediction[0][2] == max(prediction[0])):
-            cv2.putText(strFrame, "SCISSOR", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            cv2.putText(strFrame, "JUMP", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
+            press(' ')
             # print('scissor')
-        # elif(prediction[0][3] == max(prediction[0])):
-        #     cv2.putText(strFrame, "3", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][4] == max(prediction[0])):
-        #     cv2.putText(strFrame, "4", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][5] == max(prediction[0])):
-        #     cv2.putText(strFrame, "5", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][6] == max(prediction[0])):
-        #     cv2.putText(strFrame, "6", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][7] == max(prediction[0])):
-        #     cv2.putText(strFrame, "7", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][8] == max(prediction[0])):
-        #     cv2.putText(strFrame, "8", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
-        # elif(prediction[0][9] == max(prediction[0])):
-        #     cv2.putText(strFrame, "9", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2,(0,0,255),2)
-        #     # print('scissor')
         counter = 0
     cv2.imshow('Hand-signs', strFrame)
     
